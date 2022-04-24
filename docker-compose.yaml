@@ -1,0 +1,28 @@
+version: '3.1'
+
+networks:
+  lan:
+
+services:
+  shorter-pg:
+    image: postgres
+    restart: always
+    shm_size: '8gb'
+    networks:
+      - lan
+    ports:
+      - 25432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - /etc/localtime:/etc/localtime:ro
+
+  shorter-redis:
+    image: redis:6-alpine
+    command: redis-server --requirepass example
+    ports:
+      - 16379:6379
+    networks:
+      - lan    
