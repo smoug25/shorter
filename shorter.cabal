@@ -26,7 +26,8 @@ library
                     , Storage 
                     , Db
                     , Command
-                    , Cache  
+                    , Cache
+                    , Middleware
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -35,12 +36,30 @@ library
     other-extensions:
     build-depends:    base ^>=4.14.3.0
                     , time
-                    , postgresql-simple
-                    , envparse
+                    , postgresql-simple ^>=0.6.4
                     , utf8-string
                     , bytestring
                     , postgresql-simple-migration
                     , cryptonite
+                    , wai
+                    , wai-middleware-static
+                    , wai-extra
+                    , resource-pool ^>=0.2.3.2
+                    , scotty
+                    , scotty-cookie
+                    , http-types
+                    , configurator
+                    , text
+                    , aeson
+                    , hedis
+                    , smtp-mail
+                    , mime-mail
+                    , random
+                    , split
+                    , cookie
+                    , containers
+                    , case-insensitive
+                    
     hs-source-dirs:   src
     default-language: Haskell2010
     default-extensions:
@@ -54,9 +73,34 @@ executable shorter
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
-    build-depends:
-        base ^>=4.14.3.0,
-        shorter
+    build-depends: base ^>=4.14.3.0
+                   , shorter
+                   , time
+                   , postgresql-simple ^>=0.6.4
+                   , utf8-string
+                   , bytestring
+                   , postgresql-simple-migration
+                   , cryptonite
+                   , wai
+                   , wai-middleware-static
+                   , wai-extra
+                   , resource-pool ^>=0.2.3.2
+                   , scotty
+                   , scotty-cookie
+                   , http-types
+                   , configurator
+                   , text
+                   , aeson
+                   , hedis
+                   , smtp-mail
+                   , mime-mail
+                   , random
+                   , split
+                   , cookie
+                   , containers
+                   , case-insensitive
 
     hs-source-dirs:   app
     default-language: Haskell2010
+    default-extensions:
+      OverloadedStrings

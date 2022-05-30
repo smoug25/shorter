@@ -11,16 +11,17 @@ import Storage
       deleteUrl,
       getUserUrls ) 
 import Data.Time ( addDays, getCurrentTime, UTCTime(utctDay) )
-import Db (withConn)
+import Db (withConnFromPool)
 import Data.Maybe ( fromJust )
+import Data.Pool(Pool, createPool, withResource)
 
 printSelectedDataOrError :: Show a => Maybe a -> IO ()
 printSelectedDataOrError Nothing = putStr "record does not exist"
 printSelectedDataOrError a = putStr (show (fromJust a))
 
-promptAndAddUser :: IO ()
-promptAndAddUser = 
-    withConn $
+promptAndAddUser :: Pool Connection -> IO ()
+promptAndAddUser pool = 
+    withConnFromPool pool $
         \conn -> do
             putStrLn "Enter user email:"
             userEmail <- getLine
@@ -28,9 +29,9 @@ promptAndAddUser =
             user <- selectUser conn userEmail
             printSelectedDataOrError user
 
-promptAndAddUrl :: IO ()
-promptAndAddUrl =
-    withConn $
+promptAndAddUrl :: Pool Connection -> IO ()
+promptAndAddUrl pool =
+    withConnFromPool pool $
         \conn -> do
             putStrLn "Enter url:"
             originUrl <- getLine
@@ -55,35 +56,35 @@ userIdFromPrompt str =
        then id 
        else 0
 
-promptAndGetUrl :: IO ()
-promptAndGetUrl =
-    withConn $
+promptAndGetUrl :: Pool Connection -> IO ()
+promptAndGetUrl pool =
+    withConnFromPool pool $
         \conn -> do
            putStrLn "Enter url hash:"
            urlHash <- getLine
            url <- selectUrl conn urlHash
            printSelectedDataOrError url
 
-promptAndGetUserUrls :: IO ()
-promptAndGetUserUrls =
-    withConn $
+promptAndGetUserUrls :: Pool Connection -> IO ()
+promptAndGetUserUrls pool =
+    withConnFromPool pool $
         \conn -> do
            putStrLn "Enter user email:"
            email <- getLine
            urls  <- getUserUrls conn email
            mapM_ print urls
 
-promptAndDeleteUser :: IO ()
-promptAndDeleteUser =
-    withConn $
+promptAndDeleteUser :: Pool Connection -> IO ()
+promptAndDeleteUser pool =
+    withConnFromPool pool $
         \conn -> do
             putStrLn "Enter user email:"
             email <- getLine
             deleteUser conn email
 
-promptAndDeleteUrl :: IO ()
-promptAndDeleteUrl =
-    withConn $
+promptAndDeleteUrl :: Pool Connection -> IO ()
+promptAndDeleteUrl pool =
+    withConnFromPool pool $
         \conn -> do
             putStrLn "Enter url hash:"
             hash <- getLine

@@ -8,5 +8,11 @@ down:
 build:
 	cabal build
 
-local_run: build
-	PG_DSN=postgresql://postgres:example@localhost:25432/shorter cabal exec shorter	
+server_local_run: build
+	cabal exec shorter server
+
+cli_local_run: build
+	cabal exec shorter cli
+
+upDb_local_run: build
+	cabal exec shorter upDb	
